@@ -1,0 +1,238 @@
+// Example program
+#include <iostream>
+#include <string>
+using namespace std;
+
+void Print(int arr[], int k){
+    for(int i = 0; i<k; i++){
+        cout<<arr[i];
+    }
+    cout<<endl;
+}
+
+void Merge(int fArray[], int sArray[], int tmparray[], int s1, int s2){
+    int k =0;
+    //cout<<endl<<sizeof(fArray)<<endl<<endl;
+    int length_of_f = s1;
+    int length_of_s = s2;
+    while(length_of_f!=0 && length_of_s!=0){
+        if(fArray[0]<sArray[0]){
+            tmparray[k] = fArray[0];
+            for(int o=0; o<length_of_f-1; o++){
+                swap(fArray[o], fArray[o+1]);
+            }
+            length_of_f--;
+        }
+        else{
+            tmparray[k] = sArray[0];
+            for(int o=0; o<length_of_s-1; o++){
+                swap(sArray[o], sArray[o+1]);
+            }
+            length_of_s--;
+        }
+        k++;
+    }
+    
+    while(length_of_f!=0){
+        tmparray[k] = fArray[0];
+        for(int o=0; o<length_of_f-1; o++){
+            swap(fArray[o], fArray[o+1]);
+        }
+        length_of_f--;
+        k++;
+    }
+    
+    while(length_of_s!=0){
+        tmparray[k] = sArray[0];
+        for(int o=0; o<length_of_s-1; o++){
+            swap(sArray[o], sArray[o+1]);
+        }
+        length_of_s--;
+        k++;
+    }
+    
+}
+
+
+
+void MergeSort(int a[], int size){
+            
+            
+            if(size==1){
+                return;
+            }
+            else{
+                int s1 = size / 2;
+                int s2 = size - s1;
+                int array_merged_f[s1];
+                int array_merged_s[s2];
+                for(int k=0; k<s1; k++){
+                    array_merged_f[k] = a[k];
+                }
+                int l =0;
+                for(int k=s1; k<size; k++){
+                    array_merged_s[l] = a[k];
+                    l++;
+                }
+                MergeSort(array_merged_f, s1);
+                MergeSort(array_merged_s, s2);
+                int tmp[s1+s2];
+                Merge(array_merged_f, array_merged_s, tmp, s1, s2);
+                for(int k=0; k<size;  k++){
+                    a[k] = tmp[k];
+                }
+                
+            }
+}
+
+
+
+
+void QuickSort(int arr[],int left,int right){
+    int size = right - left +1;
+    int wall = left;
+    int pivot = arr[right];
+    
+    for(int i = left; i<right ; i++){
+        if(arr[i]<pivot){
+            if(i!=left){
+                swap(arr[wall], arr[i]);
+            }
+            wall++;
+            
+        }
+        
+        
+    }
+    swap(arr[right], arr[wall]);
+    
+    if(right - wall - 2 > 0){
+        QuickSort(arr, wall+1, right);
+    }
+    if(wall-left-1>0){
+        QuickSort(arr, left, wall-1);
+    }
+    
+    
+}
+
+
+class ArraySort{
+    public:
+        int* our_array;
+        int size;
+    
+   ArraySort(int n){
+        our_array = new int[n];
+        size = n;
+    }
+    
+    
+    
+    void InsertArray(){
+        cout<<"Your array is "<<size<<" long,"<<endl;
+        for(int i=0; i<size; i++){
+            cout<<"Please insert number "<<1+i<<": ";
+            cin>>our_array[i];
+        }
+    }
+    
+    
+    
+    void SelectionSort(){
+            int ss = size;
+            int min=our_array[0]; 
+            int index = 0;
+            while(ss!=0){
+                for(int i=1; i<ss; i++){
+                    if(min > our_array[i]){
+                        min = our_array[i];
+                        index = i;
+                    }
+                }
+                swap(our_array[index] , our_array[ss-1]);
+                ss--;
+                min = our_array[0];
+                index  = 0;
+            }
+        }
+    
+    
+    
+    void BubleSort(){
+            int ss = size;
+            while(ss!=0){
+                for(int i=0; i<ss-1; i++){
+                    if(our_array[i] > our_array[i+1]){
+                        swap(our_array[i], our_array[i+1]);
+                    }
+                }
+                ss--;
+            }
+        }
+    
+    void InsertionSort(){
+            for(int i=1; i<size; i++){
+                for(int k=i; k>0; k--){
+                    if(our_array[k]<our_array[k-1]){
+                        swap(our_array[k], our_array[k-1]);
+                    }
+                    else{
+                        break;
+                    }
+                }
+            }
+        }
+        
+    
+    
+    void PrintArray(){
+        for(int i=0; i<size; i++){
+            cout<<our_array[i]<<" ";
+        }
+        
+        }
+
+};
+
+
+
+int main()
+{
+    int n;
+    cout<<"Enter the size of your array or 0 for exiting: ";
+        cin>>n;    
+    do{
+        
+        cout<<endl;
+        ArraySort k(n);
+        k.InsertArray();
+        cout<<"Choose the way of sorting. 1-> Selection , 2-> Bubble , 3-> Insertion , 4-> Merge , 5-> Quick :"<<endl;
+        int cl;
+        cin>>cl;
+        switch(cl){
+            case 1:
+                k.SelectionSort();
+                break;
+            case 2:
+                k.BubleSort();
+                break;
+            case 3:
+                k.InsertionSort();
+                break;
+            case 4:
+                MergeSort(k.our_array, n);
+                break;
+            case 5:
+                QuickSort(k.our_array, 0, n-1);
+                break;
+            default: break;    
+        }
+        
+        
+        k.PrintArray();
+        cout<<"Enter the size of your array or 0 for exiting: ";
+        cin>>n;    
+    }
+    while(n>0);
+}
